@@ -11,111 +11,209 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
 <style>
-/* Layout: one narrow phone column, sticky top bar with tabs, cards only for bookable items */
+/* Layout: phone-first app. Illustrated hero scene, chunky toy-like cards and buttons, bottom tab bar. */
 :root{
-  --bg:#f6f8f4; --surface:#ffffff; --ink:#1d2a26; --muted:#5b6b65; --line:#dfe6e0;
-  --leaf:#2e7d5b; --leaf-ink:#ffffff; --leaf-soft:#e3f1ea;
-  --sun:#f4b73f; --sun-soft:#fff3d6; --sun-ink:#5a3d00;
-  --warn-soft:#fdeceb; --warn-ink:#8a2b23;
+  --bg:#f2f8ff; --surface:#ffffff; --ink:#22304a; --muted:#5d6b85; --line:#dbe6f3;
+  --sun:#ffc23d; --coral:#ff7a6b; --sky:#4aa8ff; --leaf:#34b27a; --grape:#9b7bff; --pink:#ff8fc2;
+  --brand:#2f8f63; --brand-ink:#ffffff; --brand-soft:#e2f5ec; --shadow:#c9d8ea;
+  --sun-soft:#fff2cf; --sun-ink:#6a4700; --warn-soft:#ffe8e5; --warn-ink:#9a2a1f;
+  --sky-top:#bfe3ff; --sky-bottom:#eaf6ff; --hill:#7fd39f; --hill2:#5cc489;
   --display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
   --body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#121916; --surface:#1a2420; --ink:#e7efea; --muted:#9db0a8; --line:#2b3a34;
-  --leaf:#5fc497; --leaf-ink:#0d1a14; --leaf-soft:#1d3329;
-  --sun:#f4c062; --sun-soft:#3a2e14; --sun-ink:#ffe2a6;
-  --warn-soft:#3a1c1a; --warn-ink:#ffb4ab; color-scheme:dark}}
+  --bg:#141a26; --surface:#1d2535; --ink:#eef3fb; --muted:#a6b3c9; --line:#2e3a50;
+  --brand:#5fd39c; --brand-ink:#0f1d16; --brand-soft:#1d3a2d; --shadow:#0b0f17;
+  --sun-soft:#3d3113; --sun-ink:#ffe1a0; --warn-soft:#3d1f1c; --warn-ink:#ffb3a8;
+  --sky-top:#24345a; --sky-bottom:#1b2740; --hill:#2f7a55; --hill2:#256647; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#121916; --surface:#1a2420; --ink:#e7efea; --muted:#9db0a8; --line:#2b3a34;
-  --leaf:#5fc497; --leaf-ink:#0d1a14; --leaf-soft:#1d3329;
-  --sun:#f4c062; --sun-soft:#3a2e14; --sun-ink:#ffe2a6;
-  --warn-soft:#3a1c1a; --warn-ink:#ffb4ab; color-scheme:dark}
+  --bg:#141a26; --surface:#1d2535; --ink:#eef3fb; --muted:#a6b3c9; --line:#2e3a50;
+  --brand:#5fd39c; --brand-ink:#0f1d16; --brand-soft:#1d3a2d; --shadow:#0b0f17;
+  --sun-soft:#3d3113; --sun-ink:#ffe1a0; --warn-soft:#3d1f1c; --warn-ink:#ffb3a8;
+  --sky-top:#24345a; --sky-bottom:#1b2740; --hill:#2f7a55; --hill2:#256647; color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
 .wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
-.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px}
-.brand{font-family:var(--display);font-weight:800;font-size:1.25rem;line-height:1.1;color:var(--leaf);display:flex;align-items:center;gap:8px}
-.brand svg{flex:none}
-.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
-.lang button{border:0;background:transparent;color:var(--muted);font:600 .85rem var(--body);padding:6px 12px;cursor:pointer}
-.lang button[aria-pressed="true"]{background:var(--leaf);color:var(--leaf-ink)}
-nav{display:flex;gap:4px;overflow-x:auto;padding-bottom:8px}
-nav a{flex:1;text-align:center;white-space:nowrap;text-decoration:none;color:var(--muted);font-weight:600;font-size:.9rem;padding:8px 10px;border-radius:10px}
-nav a[aria-current="page"]{background:var(--leaf-soft);color:var(--leaf)}
-main{padding-block:20px 48px}
-section[data-view]{display:flex;flex-direction:column;gap:18px}
 h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
-h1{font-size:2rem;font-weight:800}
-h2{font-size:1.45rem;font-weight:700}
+h1{font-size:2.1rem;font-weight:800}
+h2{font-size:1.55rem;font-weight:800}
 h3{font-size:1.15rem;font-weight:700}
 p{margin:0}
 .muted{color:var(--muted)}
-.eyebrow{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--muted)}
-.preview{background:var(--sun-soft);color:var(--sun-ink);border-radius:12px;padding:10px 14px;font-size:.88rem}
-.hero{display:flex;flex-direction:column;gap:12px;padding-top:6px}
-.hero .ages{display:inline-block;align-self:flex-start;background:var(--sun);color:#3b2800;font-weight:600;font-size:.85rem;padding:3px 12px;border-radius:999px}
-.btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;border:0;border-radius:14px;padding:13px 18px;font:600 1rem var(--body);cursor:pointer;text-decoration:none;background:var(--leaf);color:var(--leaf-ink)}
-.btn.ghost{background:transparent;color:var(--leaf);border:2px solid var(--leaf)}
-.btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
-.row{display:flex;gap:10px;flex-wrap:wrap}
+
+/* Top bar */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--surface);border-bottom:2px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px}
+.brand{font-family:var(--display);font-weight:800;font-size:1.25rem;line-height:1.1;color:var(--brand);display:flex;align-items:center;gap:8px}
+.brand svg{flex:none;animation:wiggle 4s ease-in-out infinite;transform-origin:50% 90%}
+.lang{display:flex;background:var(--bg);border-radius:999px;padding:3px}
+.lang button{border:0;background:transparent;color:var(--muted);font:700 .85rem var(--body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--sun);color:#3b2800}
+
+main{padding-block:16px calc(110px + env(safe-area-inset-bottom,0px))}
+section[data-view]{display:flex;flex-direction:column;gap:18px}
+
+/* Bottom tab bar */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:2px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom,0px);padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
+nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;padding-block:6px}
+nav.tabs a{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:var(--muted);font-weight:600;font-size:.78rem;padding:6px 2px;border-radius:14px}
+nav.tabs a .ic{width:40px;height:30px;border-radius:999px;display:grid;place-items:center;transition:background .2s, transform .2s}
+nav.tabs a svg{width:22px;height:22px}
+nav.tabs a[aria-current="page"]{color:var(--brand)}
+nav.tabs a[aria-current="page"] .ic{background:var(--brand-soft);transform:translateY(-2px)}
+
+/* Hero scene */
+.scene{position:relative;border-radius:28px;overflow:hidden;background:linear-gradient(var(--sky-top),var(--sky-bottom));aspect-ratio:16/10;max-width:100%}
+.scene svg{display:block;width:100%;height:100%}
+.sunrays{transform-origin:300px 52px;animation:spin 24s linear infinite}
+.cloud1{animation:drift 18s ease-in-out infinite alternate}
+.cloud2{animation:drift 24s ease-in-out infinite alternate-reverse}
+.bob1{animation:bob 3s ease-in-out infinite}
+.bob2{animation:bob 3s ease-in-out .5s infinite}
+.bob3{animation:bob 3s ease-in-out 1s infinite}
+.kite{animation:kite 5s ease-in-out infinite;transform-origin:70px 60px}
+.butterfly{animation:flutter 7s ease-in-out infinite}
+.wing{animation:flap .35s ease-in-out infinite alternate;transform-origin:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes drift{from{transform:translateX(-14px)}to{transform:translateX(18px)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes kite{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg) translateY(-4px)}}
+@keyframes flutter{0%{transform:translate(0,0)}25%{transform:translate(30px,-12px)}50%{transform:translate(60px,4px)}75%{transform:translate(28px,14px)}100%{transform:translate(0,0)}}
+@keyframes flap{from{transform:scaleY(1)}to{transform:scaleY(.4)}}
+@keyframes wiggle{0%,90%,100%{transform:rotate(0)}93%{transform:rotate(-8deg)}96%{transform:rotate(8deg)}}
+@keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.02)}100%{transform:scale(1)}}
+
+.hero{display:flex;flex-direction:column;gap:12px}
+.ages{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;background:var(--sun);color:#3b2800;font-weight:700;font-size:.85rem;padding:4px 14px;border-radius:999px}
+.hero h1 .hl{color:var(--brand)}
+.preview{background:var(--sun-soft);color:var(--sun-ink);border-radius:16px;padding:10px 14px;font-size:.88rem}
+
+/* Chunky toy buttons */
+.btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;border:0;border-radius:18px;padding:14px 18px;font:700 1.05rem var(--display);letter-spacing:.01em;cursor:pointer;text-decoration:none;
+  background:var(--brand);color:var(--brand-ink);box-shadow:0 5px 0 color-mix(in srgb,var(--brand) 60%,#000);transition:transform .1s, box-shadow .1s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 color-mix(in srgb,var(--brand) 60%,#000)}
+.btn.sun{background:var(--sun);color:#3b2800;box-shadow:0 5px 0 #d29a17}
+.btn.sun:active{box-shadow:0 1px 0 #d29a17}
+.btn.ghost{background:var(--surface);color:var(--brand);box-shadow:0 5px 0 var(--shadow);border:2px solid var(--line)}
+.btn.ghost:active{box-shadow:0 1px 0 var(--shadow)}
+.btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.row{display:flex;gap:12px;flex-wrap:wrap}
 .row .btn{flex:1 1 180px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px}
-.offer{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:baseline}
-.price{font-family:var(--display);font-weight:700;font-size:1.3rem;color:var(--leaf);font-variant-numeric:tabular-nums;white-space:nowrap}
-.tag{font-size:.75rem;font-weight:600;background:var(--sun-soft);color:var(--sun-ink);padding:2px 8px;border-radius:999px;justify-self:start}
-ul.plain{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
-.ticks li{padding-left:28px;position:relative}
-.ticks li::before{content:"";position:absolute;left:4px;top:.45em;width:12px;height:7px;border-left:3px solid var(--leaf);border-bottom:3px solid var(--leaf);transform:rotate(-45deg)}
-.sess{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:start;padding-block:12px;border-top:1px solid var(--line)}
-.sess:first-child{border-top:0}
-.date{background:var(--leaf-soft);color:var(--leaf);border-radius:12px;text-align:center;padding:6px 0;font-variant-numeric:tabular-nums}
-.date b{display:block;font-family:var(--display);font-size:1.4rem;line-height:1}
-.date span{font-size:.72rem;font-weight:600;text-transform:uppercase}
+
+.card{background:var(--surface);border:2px solid var(--line);border-radius:24px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.blob{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;flex:none;color:#fff}
+.blob svg{width:28px;height:28px}
+
+/* "What you get" tiles */
+.gets{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.get{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:8px;font-size:.9rem;font-weight:500;min-width:0}
+.get .blob{width:40px;height:40px;border-radius:14px}
+.get .blob svg{width:22px;height:22px}
+
+/* Offers */
+.offers{display:flex;flex-direction:column;gap:12px}
+.offer{display:grid;grid-template-columns:auto 1fr auto;gap:4px 14px;align-items:center;background:var(--surface);border:2px solid var(--line);border-radius:24px;padding:14px 16px;position:relative}
+.offer.best{border-color:var(--sun);box-shadow:0 5px 0 var(--sun-soft)}
+.offer .txt{min-width:0}
+.price{font-family:var(--display);font-weight:800;font-size:1.25rem;color:var(--brand);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tag{position:absolute;top:-11px;right:14px;font-size:.75rem;font-weight:700;background:var(--sun);color:#3b2800;padding:2px 10px;border-radius:999px}
+
+/* Sessions */
+.sess{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;padding:14px;border-radius:22px;background:var(--surface);border:2px solid var(--line)}
 .sess .meta{font-size:.88rem;color:var(--muted)}
+.sess .when{display:inline-block;margin-top:6px;font-size:.82rem;font-weight:600;background:var(--bg);border-radius:999px;padding:3px 10px;font-variant-numeric:tabular-nums}
+.date{width:58px;border-radius:16px;text-align:center;padding:6px 0;color:#fff;font-variant-numeric:tabular-nums}
+.date b{display:block;font-family:var(--display);font-size:1.5rem;line-height:1}
+.date span{font-size:.7rem;font-weight:700;text-transform:uppercase}
+.label{font-family:var(--display);font-weight:700;font-size:1.05rem;color:var(--muted)}
+.list{display:flex;flex-direction:column;gap:10px}
+
+/* Form */
 form{display:flex;flex-direction:column;gap:14px}
 label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.92rem}
-input,select{font:400 1rem var(--body);color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:12px}
-.choices{display:flex;flex-direction:column;gap:8px;border:0;padding:0;margin:0}
+input,select{font:400 1rem var(--body);color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:12px 14px}
+.choices{display:flex;flex-direction:column;gap:10px;border:0;padding:0;margin:0}
 .choices legend{font-weight:600;font-size:.92rem;margin-bottom:6px}
-.choice{flex-direction:row;align-items:center;gap:12px;font-weight:500;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer}
-.choice:has(input:checked){border-color:var(--leaf);background:var(--leaf-soft)}
-.choice input{accent-color:var(--leaf);width:20px;height:20px;margin:0}
+.choice{flex-direction:row;align-items:center;gap:12px;font-weight:600;background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:12px 14px;cursor:pointer;transition:transform .15s}
+.choice:has(input:checked){border-color:var(--brand);background:var(--brand-soft);animation:pop .3s ease}
+.choice input{accent-color:var(--brand);width:22px;height:22px;margin:0}
 .choice .grow{flex:1;min-width:0}
 .choice .price{font-size:1.05rem}
-.err{background:var(--warn-soft);color:var(--warn-ink);border-radius:12px;padding:10px 14px;font-size:.9rem}
-.step{display:grid;grid-template-columns:32px 1fr;gap:12px}
-.step .n{width:32px;height:32px;border-radius:50%;background:var(--sun);color:#3b2800;font-family:var(--display);font-weight:800;display:grid;place-items:center}
-.step > div{min-width:0;display:flex;flex-direction:column;gap:8px}
-.code{font-family:var(--display);font-size:1.6rem;font-weight:800;letter-spacing:.04em;color:var(--leaf)}
-.msg{background:var(--bg);border:1px dashed var(--line);border-radius:12px;padding:10px 12px;font-size:.88rem;white-space:pre-wrap;overflow-wrap:anywhere}
-.qr{background:#fff;border-radius:14px;padding:14px;align-self:center;display:grid;place-items:center}
+.err{background:var(--warn-soft);color:var(--warn-ink);border-radius:16px;padding:10px 14px;font-size:.9rem}
+
+/* Booking done */
+.done-head{text-align:center;align-items:center}
+.done-head .star{width:84px;height:84px;animation:bob 2.4s ease-in-out infinite}
+.step{display:grid;grid-template-columns:36px 1fr;gap:12px}
+.step .n{width:36px;height:36px;border-radius:50%;background:var(--sun);color:#3b2800;font-family:var(--display);font-weight:800;font-size:1.1rem;display:grid;place-items:center}
+.step > div{min-width:0;display:flex;flex-direction:column;gap:10px}
+.code{font-family:var(--display);font-size:2rem;font-weight:800;letter-spacing:.06em;color:var(--brand)}
+.msg{background:var(--bg);border:2px dashed var(--line);border-radius:16px;padding:10px 12px;font-size:.88rem;white-space:pre-wrap;overflow-wrap:anywhere}
+.qr{background:#fff;border-radius:20px;padding:14px;align-self:center;display:grid;place-items:center;border:4px solid var(--sun)}
 .qr img,.qr canvas{display:block;width:220px!important;height:220px!important}
 dl.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0;font-size:.92rem}
 dl.kv dt{color:var(--muted)}
 dl.kv dd{margin:0;font-weight:600;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
-.acts{display:flex;flex-direction:column;gap:10px}
-details.act{background:var(--surface);border:1px solid var(--line);border-radius:16px}
-details.act summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center}
+.tip{background:var(--brand-soft);border-radius:16px;padding:10px 12px;font-size:.92rem}
+.copied{font-size:.85rem;color:var(--brand);font-weight:600}
+
+/* Activities */
+.acts{display:flex;flex-direction:column;gap:12px}
+details.act{background:var(--surface);border:2px solid var(--line);border-radius:24px;overflow:hidden}
+details.act summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}
 details.act summary::-webkit-details-marker{display:none}
-details.act summary .num{width:40px;height:40px;border-radius:12px;background:var(--sun-soft);color:var(--sun-ink);font-family:var(--display);font-weight:800;font-size:1.2rem;display:grid;place-items:center}
-details.act summary .chev{width:10px;height:10px;border-right:2.5px solid var(--muted);border-bottom:2.5px solid var(--muted);transform:rotate(45deg);transition:transform .2s}
-details.act[open] summary .chev{transform:rotate(-135deg)}
+details.act summary .chev{width:28px;height:28px;border-radius:50%;background:var(--bg);display:grid;place-items:center;transition:transform .25s}
+details.act summary .chev::before{content:"";width:8px;height:8px;border-right:2.5px solid var(--muted);border-bottom:2.5px solid var(--muted);transform:translateY(-2px) rotate(45deg)}
+details.act[open] summary .chev{transform:rotate(180deg)}
+details.act[open]{animation:pop .3s ease}
 details.act .body{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}
-details.act ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
-.tip{background:var(--leaf-soft);border-radius:12px;padding:10px 12px;font-size:.92rem}
-.copied{font-size:.85rem;color:var(--leaf);font-weight:600}
-footer{padding-block:24px;font-size:.82rem;color:var(--muted);text-align:center}
-@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+details.act ol{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:8px;counter-reset:s}
+details.act ol li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;gap:10px}
+details.act ol li::before{content:counter(s);width:28px;height:28px;border-radius:50%;background:var(--sun-soft);color:var(--sun-ink);font:800 .9rem var(--display);display:grid;place-items:center}
+.small{font-size:.85rem}
+
+/* CVC game */
+.levels{display:flex;gap:8px;flex-wrap:wrap}
+.levels button{flex:1 1 140px;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:16px;padding:10px 12px;font:700 .95rem var(--display);cursor:pointer}
+.levels button[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft);color:var(--brand)}
+.board{background:var(--surface);border:2px solid var(--line);border-radius:28px;padding:18px 16px 20px;display:flex;flex-direction:column;align-items:center;gap:16px;position:relative}
+.stars{position:absolute;top:12px;right:14px;display:flex;align-items:center;gap:4px;font:800 1rem var(--display);color:var(--sun-ink);background:var(--sun-soft);padding:3px 10px;border-radius:999px;font-variant-numeric:tabular-nums}
+.stars svg{width:18px;height:18px}
+.count{position:absolute;top:14px;left:16px;font-size:.82rem;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
+.pic{font-size:5.5rem;line-height:1;margin-top:18px;user-select:none;animation:bob 3s ease-in-out infinite}
+.hear{border:0;background:var(--sky);color:#fff;border-radius:999px;padding:8px 16px;font:700 .95rem var(--display);display:inline-flex;align-items:center;gap:6px;cursor:pointer;box-shadow:0 4px 0 #2a7fcf}
+.hear:active{transform:translateY(3px);box-shadow:0 1px 0 #2a7fcf}
+.hear svg{width:18px;height:18px}
+.slots{display:flex;gap:10px}
+.slot{width:70px;height:78px;border-radius:18px;border:3px dashed var(--line);display:grid;place-items:center;font:800 2.6rem var(--display);color:#fff;transition:background .2s}
+.slot.on{border-style:solid;border-color:transparent;animation:pop .35s ease}
+.slot.glow{transform:scale(1.12);transition:transform .2s;box-shadow:0 0 0 5px var(--sun)}
+.tiles{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.tile{width:54px;height:60px;border-radius:16px;border:0;background:var(--bg);color:var(--ink);font:800 2.1rem var(--display);cursor:pointer;box-shadow:0 5px 0 var(--shadow);border:2px solid var(--line)}
+.tile:active{transform:translateY(4px);box-shadow:0 1px 0 var(--shadow)}
+.tile.used{visibility:hidden}
+.tile.no{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.word-done{font:800 1.6rem var(--display);color:var(--brand);letter-spacing:.04em;min-height:2.2rem}
+.game-tip{font-size:.9rem}
+
+/* Confetti */
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:20;overflow:hidden}
+.confetti i{position:absolute;top:-20px;width:10px;height:14px;border-radius:3px;animation:fall 2.4s cubic-bezier(.25,.6,.4,1) forwards}
+@keyframes fall{to{transform:translate(var(--dx),110vh) rotate(var(--r));}}
+
+footer{padding-block:8px 24px;font-size:.82rem;color:var(--muted);text-align:center}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
 <header>
   <div class="wrap">
     <div class="bar">
       <div class="brand">
-        <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><ellipse cx="9" cy="18" rx="5" ry="7" fill="var(--leaf)"/><ellipse cx="19" cy="10" rx="5" ry="7" fill="var(--sun)"/></svg>
+        <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 28 V14" stroke="var(--brand)" stroke-width="3" stroke-linecap="round"/><ellipse cx="9" cy="12" rx="6" ry="8" transform="rotate(-30 9 12)" fill="var(--leaf)"/><ellipse cx="21" cy="10" rx="6" ry="8" transform="rotate(30 21 10)" fill="var(--sun)"/></svg>
         <span id="brandName"></span>
       </div>
       <div class="lang" role="group" aria-label="Language">
@@ -123,50 +221,85 @@ footer{padding-block:24px;font-size:.82rem;color:var(--muted);text-align:center}
         <button type="button" data-lang="en">EN</button>
       </div>
     </div>
-    <nav aria-label="Main">
-      <a href="#home" data-nav="home" data-t="navHome"></a>
-      <a href="#sessions" data-nav="sessions" data-t="navSessions"></a>
-      <a href="#book" data-nav="book" data-t="navBook"></a>
-      <a href="#activities" data-nav="activities" data-t="navActs"></a>
-    </nav>
   </div>
 </header>
 
 <main class="wrap">
-  <p class="preview" id="previewNote" hidden></p>
+  <p class="preview" id="previewNote" hidden style="margin-bottom:14px"></p>
 
   <!-- HOME -->
   <section data-view="home">
+    <div class="scene" aria-hidden="true">
+      <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice">
+        <!-- sun -->
+        <g class="sunrays">
+          <g stroke="var(--sun)" stroke-width="5" stroke-linecap="round" opacity=".8">
+            <line x1="300" y1="10" x2="300" y2="0"/><line x1="300" y1="94" x2="300" y2="104"/>
+            <line x1="258" y1="52" x2="248" y2="52"/><line x1="342" y1="52" x2="352" y2="52"/>
+            <line x1="270" y1="22" x2="263" y2="15"/><line x1="330" y1="82" x2="337" y2="89"/>
+            <line x1="330" y1="22" x2="337" y2="15"/><line x1="270" y1="82" x2="263" y2="89"/>
+          </g>
+        </g>
+        <circle cx="300" cy="52" r="30" fill="var(--sun)"/>
+        <circle cx="291" cy="47" r="3" fill="#6a4700"/><circle cx="309" cy="47" r="3" fill="#6a4700"/>
+        <path d="M290 58 q10 9 20 0" stroke="#6a4700" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <circle cx="285" cy="57" r="4" fill="#ff9d7a" opacity=".7"/><circle cx="315" cy="57" r="4" fill="#ff9d7a" opacity=".7"/>
+        <!-- clouds -->
+        <g class="cloud1" fill="#ffffff" opacity=".95"><ellipse cx="150" cy="45" rx="34" ry="15"/><ellipse cx="132" cy="40" rx="18" ry="14"/><ellipse cx="165" cy="36" rx="20" ry="16"/></g>
+        <g class="cloud2" fill="#ffffff" opacity=".85"><ellipse cx="225" cy="98" rx="26" ry="11"/><ellipse cx="238" cy="91" rx="15" ry="12"/></g>
+        <!-- kite -->
+        <g class="kite">
+          <path d="M70 60 C 90 120, 60 150, 95 200" stroke="var(--muted)" stroke-width="1.5" fill="none" stroke-dasharray="3 4"/>
+          <path d="M70 22 L92 50 L70 78 L48 50 Z" fill="var(--coral)"/>
+          <path d="M70 22 L70 78 M48 50 L92 50" stroke="#fff" stroke-width="2"/>
+          <path d="M70 78 l-6 8 l10 2 l-6 8" stroke="var(--grape)" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </g>
+        <!-- butterfly -->
+        <g class="butterfly"><g transform="translate(200 140)">
+          <ellipse class="wing" cx="-6" cy="0" rx="7" ry="9" fill="var(--pink)"/><ellipse class="wing" cx="6" cy="0" rx="7" ry="9" fill="var(--grape)"/>
+          <rect x="-1.5" y="-7" width="3" height="14" rx="1.5" fill="var(--ink)"/></g></g>
+        <!-- hills -->
+        <path d="M0 200 Q 100 160 210 195 T 400 185 V250 H0Z" fill="var(--hill)"/>
+        <path d="M0 225 Q 120 195 250 222 T 400 215 V250 H0Z" fill="var(--hill2)"/>
+        <!-- flowers -->
+        <g><circle cx="40" cy="214" r="5" fill="var(--sun)"/><circle cx="40" cy="214" r="2" fill="#fff"/>
+           <circle cx="360" cy="208" r="5" fill="var(--pink)"/><circle cx="360" cy="208" r="2" fill="#fff"/>
+           <circle cx="330" cy="226" r="4" fill="#fff"/></g>
+        <!-- ABC blocks -->
+        <g class="bob1"><rect x="200" y="176" width="40" height="40" rx="8" fill="var(--sky)"/><text x="220" y="205" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="28" fill="#fff">A</text></g>
+        <g class="bob2"><rect x="244" y="176" width="40" height="40" rx="8" fill="var(--coral)"/><text x="264" y="205" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="28" fill="#fff">B</text></g>
+        <g class="bob3"><rect x="222" y="134" width="40" height="40" rx="8" fill="var(--grape)"/><text x="242" y="163" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="28" fill="#fff">C</text></g>
+        <!-- 1 2 3 -->
+        <g class="bob2"><circle cx="318" cy="186" r="16" fill="var(--sun)"/><text x="318" y="194" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="22" fill="#3b2800">1</text></g>
+        <g class="bob3"><circle cx="150" cy="198" r="14" fill="var(--leaf)"/><text x="150" y="205" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="19" fill="#fff">2</text></g>
+        <!-- pencil -->
+        <g transform="rotate(-28 110 180)"><rect x="70" y="174" width="70" height="14" rx="3" fill="var(--sun)"/><rect x="70" y="174" width="12" height="14" rx="3" fill="var(--pink)"/><path d="M140 174 l16 7 l-16 7z" fill="#f3d6a6"/><path d="M150 179 l6 2 l-6 2z" fill="var(--ink)"/></g>
+      </svg>
+    </div>
     <div class="hero">
-      <span class="ages" data-t="ages"></span>
-      <h1 data-t="heroTitle"></h1>
+      <span class="ages"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.8-6.2 3.8 1.6-7L2 9.2l7.1-.6z" fill="#3b2800"/></svg><span data-t="ages"></span></span>
+      <h1 id="heroTitle"></h1>
       <p class="muted" data-t="heroText"></p>
       <div class="row">
-        <a class="btn" href="#book" data-t="ctaTaster"></a>
+        <a class="btn sun" href="#book" data-t="ctaTaster"></a>
         <a class="btn ghost" href="#sessions" data-t="ctaSessions"></a>
       </div>
     </div>
-    <div class="card">
-      <h3 data-t="youGet"></h3>
-      <ul class="plain ticks" id="getList"></ul>
-    </div>
+    <h2 data-t="youGet"></h2>
+    <div class="gets" id="getList"></div>
     <h2 data-t="pricesTitle"></h2>
-    <div id="offerCards" style="display:flex;flex-direction:column;gap:10px"></div>
-    <p class="muted" style="font-size:.88rem" id="hostedBy"></p>
+    <div class="offers" id="offerCards"></div>
+    <p class="muted small" id="hostedBy"></p>
   </section>
 
   <!-- SESSIONS -->
   <section data-view="sessions" hidden>
     <h2 data-t="navSessions"></h2>
-    <div class="card">
-      <span class="eyebrow" data-t="tasterLabel"></span>
-      <div id="tasterList"></div>
-    </div>
-    <div class="card">
-      <span class="eyebrow" data-t="seriesLabel"></span>
-      <div id="seriesList"></div>
-    </div>
-    <a class="btn" href="#book" data-t="ctaBook"></a>
+    <span class="label" data-t="tasterLabel"></span>
+    <div class="list" id="tasterList"></div>
+    <span class="label" data-t="seriesLabel"></span>
+    <div class="list" id="seriesList"></div>
+    <a class="btn sun" href="#book" data-t="ctaBook"></a>
   </section>
 
   <!-- BOOK -->
@@ -193,9 +326,11 @@ footer{padding-block:24px;font-size:.82rem;color:var(--muted);text-align:center}
         <button class="btn" type="submit" data-t="continue"></button>
       </form>
     </div>
-    <div id="bookDone" hidden style="display:flex;flex-direction:column;gap:18px">
-      <div class="card">
-        <span class="eyebrow" data-t="yourCode"></span>
+    <div id="bookDone" hidden style="display:flex;flex-direction:column;gap:20px">
+      <div class="card done-head">
+        <svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.8-6.2 3.8 1.6-7L2 9.2l7.1-.6z" fill="var(--sun)" stroke="#d29a17" stroke-width="1" stroke-linejoin="round"/><circle cx="9.6" cy="11" r=".9" fill="#6a4700"/><circle cx="14.4" cy="11" r=".9" fill="#6a4700"/><path d="M10.3 13.3q1.7 1.5 3.4 0" stroke="#6a4700" stroke-width=".9" fill="none" stroke-linecap="round"/></svg>
+        <h2 data-t="yay"></h2>
+        <span class="muted small" data-t="yourCode"></span>
         <span class="code" id="bookCode"></span>
         <p id="bookSummary"></p>
       </div>
@@ -210,7 +345,7 @@ footer{padding-block:24px;font-size:.82rem;color:var(--muted);text-align:center}
             <a class="btn ghost" id="zaloLink" target="_blank" rel="noopener" data-t="openZalo"></a>
           </div>
           <span class="copied" id="copiedNote" hidden data-t="copied"></span>
-          <p class="muted" style="font-size:.85rem"><span data-t="zaloNumber"></span> <b id="zaloNum"></b></p>
+          <p class="muted small"><span data-t="zaloNumber"></span> <b id="zaloNum"></b></p>
         </div>
       </div>
       <div class="step" id="payStep">
@@ -242,8 +377,39 @@ footer{padding-block:24px;font-size:.82rem;color:var(--muted);text-align:center}
     <p class="muted" data-t="actsIntro"></p>
     <div class="acts" id="actList"></div>
   </section>
+
+  <!-- PLAY: CVC word builder -->
+  <section data-view="play" hidden>
+    <h2 data-t="playTitle"></h2>
+    <p class="muted" data-t="playIntro"></p>
+    <div class="levels" id="levels">
+      <button type="button" data-level="0" data-t="level1"></button>
+      <button type="button" data-level="1" data-t="level2"></button>
+    </div>
+    <div class="board">
+      <span class="count" id="gCount"></span>
+      <span class="stars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.8-6.2 3.8 1.6-7L2 9.2l7.1-.6z" fill="var(--sun)"/></svg><span id="gStars">0</span></span>
+      <div class="pic" id="gPic" role="img"></div>
+      <button class="hear" type="button" id="gHear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg><span data-t="hear"></span></button>
+      <div class="slots" id="gSlots"></div>
+      <div class="word-done" id="gDone" aria-live="polite"></div>
+      <div class="tiles" id="gTiles"></div>
+      <button class="btn sun" type="button" id="gNext" hidden data-t="nextWord"></button>
+    </div>
+    <p class="tip game-tip" data-t="playTip"></p>
+  </section>
+  <footer id="foot"></footer>
 </main>
-<footer class="wrap" id="foot"></footer>
+
+<nav class="tabs" aria-label="Main">
+  <div class="in">
+    <a href="#home" data-nav="home"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg></span><span data-t="navHome"></span></a>
+    <a href="#sessions" data-nav="sessions"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><span data-t="navSessions"></span></a>
+    <a href="#book" data-nav="book"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.2-5.4 3.2 1.3-6-4.6-4.1 6.1-.6z"/></svg></span><span data-t="navBook"></span></a>
+    <a href="#play" data-nav="play"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="12" rx="5"/><path d="M8 11v4M6 13h4"/><circle cx="15.5" cy="12" r="1" fill="currentColor"/><circle cx="17.5" cy="14.5" r="1" fill="currentColor"/></svg></span><span data-t="navPlay"></span></a>
+    <a href="#activities" data-nav="activities"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></svg></span><span data-t="navActs"></span></a>
+  </div>
+</nav>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
@@ -280,6 +446,30 @@ const CONFIG = {
   }
 };
 
+/* ---------- Pictures: one colour and icon per session ---------- */
+const COLOURS = ["var(--sun)","var(--coral)","var(--sky)","var(--leaf)","var(--grape)","var(--pink)"];
+const ICONS = [
+  // 1 star / I can
+  '<svg viewBox="0 0 24 24"><path d="M12 2.5l2.8 6 6.6.7-4.9 4.5 1.4 6.5L12 16.9l-5.9 3.3 1.4-6.5L2.6 9.2l6.6-.7z" fill="#fff"/></svg>',
+  // 2 shoe / independence
+  '<svg viewBox="0 0 24 24"><path d="M3 15c0-3 1-7 3-8l4 4c2 1 5 1 8 2 2 .6 3 2 3 3.5V18H3z" fill="#fff"/><path d="M3 18h18" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>',
+  // 3 speech bubble with "a" / sounds
+  '<svg viewBox="0 0 24 24"><path d="M4 4h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-9l-5 4v-4H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" fill="#fff"/><text x="12" y="13.8" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="800" font-size="10" fill="var(--sky)">a</text></svg>',
+  // 4 numbers / maths
+  '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4" fill="#fff"/><text x="12" y="16.5" text-anchor="middle" font-family="Baloo 2,sans-serif" font-weight="800" font-size="11" fill="var(--leaf)">123</text></svg>',
+  // 5 heart / feelings
+  '<svg viewBox="0 0 24 24"><path d="M12 21s-8-4.8-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.2-8 11-8 11z" fill="#fff"/></svg>',
+  // 6 school bag
+  '<svg viewBox="0 0 24 24"><path d="M9 6V5a3 3 0 0 1 6 0v1" stroke="#fff" stroke-width="2.2" fill="none"/><rect x="4" y="6" width="16" height="15" rx="4" fill="#fff"/><rect x="8" y="12" width="8" height="5" rx="1.5" fill="var(--pink)"/></svg>'
+];
+const GET_ICONS = [
+  ['var(--sky)','<svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3" fill="#fff"/><path d="M8 9h8M8 13h8M8 17h5" stroke="var(--sky)" stroke-width="2" stroke-linecap="round"/></svg>'],
+  ['var(--leaf)','<svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="#fff"/><circle cx="9" cy="10.5" r="1.3" fill="var(--leaf)"/><circle cx="12" cy="10.5" r="1.3" fill="var(--leaf)"/><circle cx="15" cy="10.5" r="1.3" fill="var(--leaf)"/></svg>'],
+  ['var(--coral)','<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3" fill="#fff"/><path d="M3 10h18" stroke="var(--coral)" stroke-width="2"/><path d="M9 15l2 2 4-4" stroke="var(--coral)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>'],
+  ['var(--grape)','<svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="6" fill="#fff"/><path d="M8 14l-2 7 6-3 6 3-2-7" fill="#fff"/><circle cx="12" cy="9" r="2.5" fill="var(--grape)"/></svg>']
+];
+const blob = (colour, svg, cls="blob") => `<span class="${cls}" style="background:${colour}">${svg}</span>`;
+
 /* ---------- Session content (from the workshop series) ---------- */
 const SESSIONS = [
   { en:{t:"What “school ready” really means", big:"Readiness is about habits and confidence, not reading and writing."},
@@ -311,13 +501,13 @@ const SESSIONS = [
 /* ---------- Interface text ---------- */
 const T = {
   navHome:{en:"Home",vi:"Trang chủ"}, navSessions:{en:"Sessions",vi:"Lịch học"}, navBook:{en:"Book",vi:"Đăng ký"}, navActs:{en:"At home",vi:"Ở nhà"},
-  ages:{en:"For parents of 4 to 6-year-olds",vi:"Dành cho phụ huynh có con 4–6 tuổi"},
-  heroTitle:{en:"Ready for Grade 1, together",vi:"Cùng con sẵn sàng vào lớp 1"},
+  ages:{en:"For parents of 4 to 6-year-olds",vi:"Cho phụ huynh có con 4–6 tuổi"},
+  heroA:{en:"Ready for ",vi:"Cùng con "}, heroB:{en:"Grade 1",vi:"sẵn sàng"}, heroC:{en:", together!",vi:" vào lớp 1!"},
   heroText:{en:"Six short, friendly workshops led by an experienced Cambridge primary teacher. Simple, play-based ideas you can use at home every day. No worksheets, no tutors.",vi:"Sáu buổi workshop ngắn, thân thiện do một giáo viên tiểu học Cambridge giàu kinh nghiệm hướng dẫn. Những ý tưởng đơn giản, qua trò chơi, bố mẹ dùng được ở nhà mỗi ngày. Không cần phiếu bài tập, không cần gia sư."},
-  ctaTaster:{en:"Book a free taster",vi:"Đăng ký buổi học thử miễn phí"}, ctaSessions:{en:"See dates",vi:"Xem lịch học"}, ctaBook:{en:"Book a place",vi:"Đăng ký chỗ"},
+  ctaTaster:{en:"Book a free taster",vi:"Đăng ký học thử miễn phí"}, ctaSessions:{en:"See dates",vi:"Xem lịch học"}, ctaBook:{en:"Book a place",vi:"Đăng ký chỗ"},
   youGet:{en:"What you get",vi:"Bố mẹ nhận được"},
-  get:{en:["A take-home activity card after every session, in English and Vietnamese","A private Zalo group for questions and tips during the series","A first-month plan for Grade 1","A certificate for your family at the end"],
-       vi:["Thẻ hoạt động tại nhà sau mỗi buổi, bằng tiếng Anh và tiếng Việt","Nhóm Zalo riêng để hỏi đáp và chia sẻ trong suốt khóa","Kế hoạch tháng đầu tiên vào lớp 1","Giấy chứng nhận cho gia đình khi hoàn thành"]},
+  get:{en:["A take-home activity card after every session, in English and Vietnamese","A private Zalo group for questions and tips","A first-month plan for Grade 1","A certificate for your family at the end"],
+       vi:["Thẻ hoạt động tại nhà sau mỗi buổi, bằng tiếng Anh và tiếng Việt","Nhóm Zalo riêng để hỏi đáp và chia sẻ","Kế hoạch tháng đầu tiên vào lớp 1","Giấy chứng nhận cho gia đình khi hoàn thành"]},
   pricesTitle:{en:"Prices",vi:"Học phí"},
   oTaster:{en:"Free taster",vi:"Buổi học thử"}, oTasterD:{en:"Session 1: what “school ready” really means",vi:"Buổi 1: “Sẵn sàng vào lớp 1” thật sự là gì?"},
   oSeries:{en:"Full series (6 sessions)",vi:"Trọn khóa (6 buổi)"}, oSeriesD:{en:"Best value, includes the Zalo group and certificate",vi:"Tiết kiệm nhất, có nhóm Zalo và giấy chứng nhận"},
@@ -332,6 +522,7 @@ const T = {
   continue:{en:"Continue",vi:"Tiếp tục"},
   errFill:{en:"Please fill in every field so we can confirm your place.",vi:"Bố mẹ vui lòng điền đầy đủ thông tin để chúng tôi xác nhận chỗ."},
   errPhone:{en:"Please check the phone number. It should have 9 to 11 digits.",vi:"Vui lòng kiểm tra lại số điện thoại (9–11 chữ số)."},
+  yay:{en:"Hooray, nearly done!",vi:"Tuyệt vời, sắp xong rồi!"},
   yourCode:{en:"Your booking code",vi:"Mã đăng ký của bạn"},
   step1:{en:"Send your booking on Zalo",vi:"Gửi thông tin đăng ký qua Zalo"},
   step1Text:{en:"Copy this message and send it to us on Zalo. We’ll reply to confirm your place.",vi:"Sao chép tin nhắn dưới đây và gửi cho chúng tôi qua Zalo. Chúng tôi sẽ trả lời để xác nhận chỗ."},
@@ -349,8 +540,22 @@ const T = {
   session:{en:"Session",vi:"Buổi"},
   previewNote:{en:"Preview: dates, venue and payment details are samples and will be updated.",vi:"Bản xem trước: ngày, địa điểm và thông tin thanh toán là mẫu, sẽ được cập nhật."},
   msgHello:{en:"Hello! I'd like to book:",vi:"Xin chào! Tôi muốn đăng ký:"},
-  footer:{en:"Questions? Message us on Zalo:",vi:"Có thắc mắc? Nhắn cho chúng tôi qua Zalo:"}
+  footer:{en:"Questions? Message us on Zalo:",vi:"Có thắc mắc? Nhắn cho chúng tôi qua Zalo:"},
+  navPlay:{en:"Play",vi:"Chơi"},
+  playTitle:{en:"Build the word!",vi:"Ghép chữ nào!"},
+  playIntro:{en:"Look at the picture, say the sounds, then tap the letters in order to build the word.",vi:"Nhìn tranh, đọc từng âm, rồi chạm vào các chữ cái theo thứ tự để ghép thành từ."},
+  level1:{en:"Level 1: s a t p i n",vi:"Cấp 1: s a t p i n"}, level2:{en:"Level 2: more words",vi:"Cấp 2: thêm từ mới"},
+  hear:{en:"Hear the word",vi:"Nghe từ"}, nextWord:{en:"Next word",vi:"Từ tiếp theo"},
+  wellDone:{en:"Well done!",vi:"Giỏi quá!"},
+  playTip:{en:"Parents: sit with your child and say each pure sound with them (“p… a… n”), then blend: “pan!”. Five words a day is plenty.",vi:"Bố mẹ: ngồi cùng con, đọc từng âm thật gọn với con (“p… a… n”), rồi ghép lại: “pan!”. Mỗi ngày 5 từ là đủ."},
+  wordOf:{en:"Word",vi:"Từ"}
 };
+
+/* ---------- CVC game words (picture + word). Level 1 uses only s a t p i n. ---------- */
+const CVC = [
+  [["pan","🍳"],["pin","📌"],["tap","🚰"],["tin","🥫"],["nap","😴"],["sip","🥤"]],
+  [["cat","🐱"],["dog","🐶"],["sun","☀️"],["bus","🚌"],["hat","🎩"],["pig","🐷"],["bed","🛏️"],["cup","☕"],["fox","🦊"],["hen","🐔"],["box","📦"],["bat","🦇"],["map","🗺️"],["van","🚐"],["bug","🐛"],["web","🕸️"],["jam","🍓"],["net","🥅"],["leg","🦵"],["mop","🧹"]]
+];
 
 /* ---------- Helpers ---------- */
 let lang = "vi";
@@ -363,9 +568,9 @@ const locale = () => lang === "vi" ? "vi-VN" : "en-GB";
 const fmtLong = s => parseDate(s).toLocaleDateString(locale(), {weekday:"long", day:"numeric", month:"long", year:"numeric"});
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
-function dateBadge(s){
+function dateBadge(s, colour){
   const d = parseDate(s);
-  return `<div class="date"><b>${d.getDate()}</b><span>${d.toLocaleDateString(locale(),{month:"short"})}</span></div>`;
+  return `<div class="date" style="background:${colour}"><b>${d.getDate()}</b><span>${d.toLocaleDateString(locale(),{month:"short"})}</span></div>`;
 }
 
 /* ---------- Render ---------- */
@@ -376,22 +581,23 @@ function render(){
   document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
   $("previewNote").hidden = !CONFIG.preview;
   $("previewNote").textContent = t("previewNote");
+  $("heroTitle").innerHTML = `${esc(t("heroA"))}<span class="hl">${esc(t("heroB"))}</span>${esc(t("heroC"))}`;
 
-  $("getList").innerHTML = T.get[lang].map(x => `<li>${esc(x)}</li>`).join("");
+  $("getList").innerHTML = T.get[lang].map((x,i) => `<div class="get">${blob(GET_ICONS[i][0], GET_ICONS[i][1])}<span>${esc(x)}</span></div>`).join("");
 
   const p = CONFIG.prices, saving = p.single * 6 - p.series;
   $("offerCards").innerHTML = [
-    ["oTaster","oTasterD",p.taster,""],
-    ["oSeries","oSeriesD",p.series, saving > 0 ? `${t("save")} ${vnd(saving)}` : ""],
-    ["oSingle","oSingleD",p.single,""]
-  ].map(([n,d,price,tag]) => `<div class="card offer"><h3>${t(n)}</h3><span class="price">${vnd(price)}</span><p class="muted" style="font-size:.9rem">${t(d)}</p>${tag?`<span class="tag">${esc(tag)}</span>`:""}</div>`).join("");
+    ["oTaster","oTasterD",p.taster,"",0,""],
+    ["oSeries","oSeriesD",p.series, saving > 0 ? `${t("save")} ${vnd(saving)}` : "",5,"best"],
+    ["oSingle","oSingleD",p.single,"",2,""]
+  ].map(([n,d,price,tag,ic,cls]) => `<div class="offer ${cls}">${blob(COLOURS[ic],ICONS[ic])}<div class="txt"><h3>${t(n)}</h3><p class="muted small">${t(d)}</p></div><span class="price">${vnd(price)}</span>${tag?`<span class="tag">${esc(tag)}</span>`:""}</div>`).join("");
   $("hostedBy").textContent = `${t("hostedBy")} ${CONFIG.venue}.`;
 
-  $("tasterList").innerHTML = CONFIG.taster.map(s => `<div class="sess">${dateBadge(s.date)}<div><h3>${esc(SESSIONS[0][lang].t)}</h3><p class="meta">${esc(fmtLong(s.date))} · ${esc(s.time)}<br>${esc(CONFIG.venue)}</p></div></div>`).join("");
-  $("seriesList").innerHTML = CONFIG.seriesStart.map((d,i) => `<div class="sess">${dateBadge(d)}<div><h3>${t("session")} ${i+1}: ${esc(SESSIONS[i][lang].t)}</h3><p class="meta">${esc(SESSIONS[i][lang].big)}</p><p class="meta">${esc(fmtLong(d))} · ${esc(CONFIG.seriesTime)}</p></div></div>`).join("");
+  $("tasterList").innerHTML = CONFIG.taster.map(s => `<div class="sess">${dateBadge(s.date, COLOURS[0])}<div><h3>${esc(SESSIONS[0][lang].t)}</h3><p class="meta">${esc(CONFIG.venue)}</p><span class="when">${esc(fmtLong(s.date))} · ${esc(s.time)}</span></div></div>`).join("");
+  $("seriesList").innerHTML = CONFIG.seriesStart.map((d,i) => `<div class="sess">${dateBadge(d, COLOURS[i])}<div><h3>${t("session")} ${i+1}: ${esc(SESSIONS[i][lang].t)}</h3><p class="meta">${esc(SESSIONS[i][lang].big)}</p><span class="when">${esc(fmtLong(d))} · ${esc(CONFIG.seriesTime)}</span></div></div>`).join("");
 
   // booking options
-  const checked = (document.querySelector('input[name="opt"]:checked')||{}).value || "taster";
+  const checked = (document.querySelector('input[name="opt"]:checked')||{}).value || "taster-0";
   const opts = CONFIG.taster.map((s,i) => ({v:"taster-"+i, label:`${t("oTaster")} · ${fmtLong(s.date)}`, price:p.taster}))
     .concat([{v:"series",label:t("oSeries"),price:p.series},{v:"single",label:t("oSingle"),price:p.single}]);
   const keep = opts.some(o => o.v === checked) ? checked : opts[0].v;
@@ -402,10 +608,11 @@ function render(){
   $("singleSession").value = selSingle;
   $("singleWrap").hidden = keep !== "single";
 
+  const openIdx = [...document.querySelectorAll("details.act")].map(d => d.open);
   $("actList").innerHTML = SESSIONS.map((s,i) => {
     const a = s.act[lang];
-    return `<details class="act"><summary><span class="num">${i+1}</span><span><b>${esc(a.name)}</b><br><span class="muted" style="font-size:.85rem">${esc(s[lang].t)}</span></span><span class="chev" aria-hidden="true"></span></summary>
-      <div class="body"><p><b>${t("why")}:</b> ${esc(s[lang].big)}</p><b>${t("how")}</b><ol>${a.steps.map(x=>`<li>${esc(x)}</li>`).join("")}</ol><p class="tip">${esc(a.tip)}</p></div></details>`;
+    return `<details class="act"${openIdx[i]?" open":""}><summary>${blob(COLOURS[i],ICONS[i])}<span><b>${esc(a.name)}</b><br><span class="muted small">${t("session")} ${i+1} · ${esc(s[lang].t)}</span></span><span class="chev" aria-hidden="true"></span></summary>
+      <div class="body"><p><b>${t("why")}:</b> ${esc(s[lang].big)}</p><b>${t("how")}</b><ol>${a.steps.map(x=>`<li><span>${esc(x)}</span></li>`).join("")}</ol><p class="tip">💡 ${esc(a.tip)}</p></div></details>`;
   }).join("");
 
   $("foot").textContent = `${CONFIG.brand} · ${t("footer")} ${CONFIG.zalo}`;
@@ -413,12 +620,31 @@ function render(){
 }
 
 /* ---------- Routing ---------- */
-const VIEWS = ["home","sessions","book","activities"];
+const VIEWS = ["home","sessions","book","play","activities"];
 function route(){
   const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "home";
   document.querySelectorAll("[data-view]").forEach(s => s.hidden = s.dataset.view !== v);
   document.querySelectorAll("[data-nav]").forEach(a => a.dataset.nav === v ? a.setAttribute("aria-current","page") : a.removeAttribute("aria-current"));
   window.scrollTo(0,0);
+}
+
+/* ---------- Celebration ---------- */
+function confetti(){
+  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const box = document.createElement("div"); box.className = "confetti"; box.setAttribute("aria-hidden","true");
+  const cols = ["#ffc23d","#ff7a6b","#4aa8ff","#34b27a","#9b7bff","#ff8fc2"];
+  for (let i=0;i<60;i++){
+    const c = document.createElement("i");
+    c.style.left = Math.random()*100 + "vw";
+    c.style.background = cols[i % cols.length];
+    c.style.animationDelay = (Math.random()*0.5) + "s";
+    c.style.setProperty("--dx", (Math.random()*160-80) + "px");
+    c.style.setProperty("--r", (Math.random()*720-360) + "deg");
+    if (i % 3 === 0) c.style.borderRadius = "50%";
+    box.appendChild(c);
+  }
+  document.body.appendChild(box);
+  setTimeout(() => box.remove(), 3200);
 }
 
 /* ---------- VietQR (EMVCo) payload ---------- */
@@ -460,6 +686,7 @@ $("form").addEventListener("submit", e => {
   showBooking(f);
   $("bookForm").hidden = true; $("bookDone").hidden = false;
   window.scrollTo(0,0);
+  confetti();
 });
 
 function describe(f){
@@ -505,10 +732,87 @@ $("again").addEventListener("click", () => {
 document.querySelectorAll("[data-lang]").forEach(b => b.addEventListener("click", () => {
   lang = b.dataset.lang; try { localStorage.setItem("lang", lang); } catch(e) {}
   render();
+  if (G.order.length) $("gCount").textContent = `${t("wordOf")} ${G.i+1}/${G.order.length}`;
 }));
 
+/* ---------- CVC game ---------- */
+const G = { level: 0, order: [], i: 0, pos: 0, stars: 0, busy: false };
+try { G.stars = Number(localStorage.getItem("cvcStars")) || 0; } catch(e) {}
+const shuffle = a => { a = a.slice(); for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const SLOT_COLOURS = ["var(--coral)","var(--sky)","var(--leaf)"];
+
+function speak(text){
+  try {
+    if (!("speechSynthesis" in window)) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    const v = speechSynthesis.getVoices().find(v => /en-GB/i.test(v.lang)) || speechSynthesis.getVoices().find(v => /^en/i.test(v.lang));
+    if (v) u.voice = v;
+    u.lang = v ? v.lang : "en-GB"; u.rate = 0.8;
+    speechSynthesis.speak(u);
+  } catch(e) {}
+}
+
+function startLevel(level){
+  G.level = level; G.order = shuffle(CVC[level]); G.i = 0;
+  document.querySelectorAll("[data-level]").forEach(b => b.setAttribute("aria-pressed", Number(b.dataset.level) === level));
+  loadWord();
+}
+
+function loadWord(){
+  const [word, pic] = G.order[G.i];
+  G.pos = 0; G.busy = false;
+  $("gPic").textContent = pic; $("gPic").setAttribute("aria-label", word);
+  $("gCount").textContent = `${t("wordOf")} ${G.i+1}/${G.order.length}`;
+  $("gStars").textContent = G.stars;
+  $("gDone").textContent = "";
+  $("gNext").hidden = true;
+  $("gSlots").innerHTML = word.split("").map(() => `<span class="slot"></span>`).join("");
+  const pool = CVC[G.level].map(w => w[0]).join("").split("").filter(l => !word.includes(l));
+  const extras = shuffle([...new Set(pool)]).slice(0, 2);
+  $("gTiles").innerHTML = shuffle(word.split("").concat(extras)).map(l => `<button type="button" class="tile" data-l="${l}">${l}</button>`).join("");
+}
+
+$("gTiles").addEventListener("click", e => {
+  const tile = e.target.closest(".tile"); if (!tile || G.busy) return;
+  const word = G.order[G.i][0];
+  if (tile.dataset.l === word[G.pos]){
+    const slot = $("gSlots").children[G.pos];
+    slot.textContent = tile.dataset.l; slot.style.background = SLOT_COLOURS[G.pos]; slot.classList.add("on");
+    tile.classList.add("used"); G.pos++;
+    if (G.pos === word.length) finishWord(word);
+  } else {
+    tile.classList.remove("no"); void tile.offsetWidth; tile.classList.add("no");
+  }
+});
+
+function finishWord(word){
+  G.busy = true;
+  const slots = [...$("gSlots").children];
+  const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const gap = reduce ? 0 : 450;
+  slots.forEach((s, k) => setTimeout(() => { slots.forEach(x => x.classList.remove("glow")); s.classList.add("glow"); }, k * gap));
+  setTimeout(() => {
+    slots.forEach(x => x.classList.remove("glow"));
+    speak(word);
+    $("gDone").textContent = `${word}! ${t("wellDone")}`;
+    G.stars++; $("gStars").textContent = G.stars;
+    try { localStorage.setItem("cvcStars", G.stars); } catch(e) {}
+    confetti();
+    $("gNext").hidden = false;
+  }, slots.length * gap);
+}
+
+$("gNext").addEventListener("click", () => {
+  G.i++;
+  if (G.i >= G.order.length) { G.order = shuffle(CVC[G.level]); G.i = 0; }
+  loadWord();
+});
+$("gHear").addEventListener("click", () => speak(G.order[G.i][0]));
+document.querySelectorAll("[data-level]").forEach(b => b.addEventListener("click", () => startLevel(Number(b.dataset.level))));
+
 window.addEventListener("hashchange", route);
-render(); route();
+render(); startLevel(0); route();
 </script>
 
 </body>

@@ -11,3 +11,5 @@ Everything you are likely to change (prices, dates, venue, Zalo number, bank det
 pencil icon, change the values, and click **Commit changes**. The live site updates within a minute or two.
 
 Set `preview: false` once the dates, venue and payment details are real.
+
+Live site: https://malcolmgouws-coder.github.io/parent-hub/

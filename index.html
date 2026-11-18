@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>body{margin:0}</style>
+</head>
+<body>
+<title>Little Steps Parent Hub</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
+<style>
+/* Layout: one narrow phone column, sticky top bar with tabs, cards only for bookable items */
+:root{
+  --bg:#f6f8f4; --surface:#ffffff; --ink:#1d2a26; --muted:#5b6b65; --line:#dfe6e0;
+  --leaf:#2e7d5b; --leaf-ink:#ffffff; --leaf-soft:#e3f1ea;
+  --sun:#f4b73f; --sun-soft:#fff3d6; --sun-ink:#5a3d00;
+  --warn-soft:#fdeceb; --warn-ink:#8a2b23;
+  --display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121916; --surface:#1a2420; --ink:#e7efea; --muted:#9db0a8; --line:#2b3a34;
+  --leaf:#5fc497; --leaf-ink:#0d1a14; --leaf-soft:#1d3329;
+  --sun:#f4c062; --sun-soft:#3a2e14; --sun-ink:#ffe2a6;
+  --warn-soft:#3a1c1a; --warn-ink:#ffb4ab; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121916; --surface:#1a2420; --ink:#e7efea; --muted:#9db0a8; --line:#2b3a34;
+  --leaf:#5fc497; --leaf-ink:#0d1a14; --leaf-soft:#1d3329;
+  --sun:#f4c062; --sun-soft:#3a2e14; --sun-ink:#ffe2a6;
+  --warn-soft:#3a1c1a; --warn-ink:#ffb4ab; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px}
+.brand{font-family:var(--display);font-weight:800;font-size:1.25rem;line-height:1.1;color:var(--leaf);display:flex;align-items:center;gap:8px}
+.brand svg{flex:none}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{border:0;background:transparent;color:var(--muted);font:600 .85rem var(--body);padding:6px 12px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--leaf);color:var(--leaf-ink)}
+nav{display:flex;gap:4px;overflow-x:auto;padding-bottom:8px}
+nav a{flex:1;text-align:center;white-space:nowrap;text-decoration:none;color:var(--muted);font-weight:600;font-size:.9rem;padding:8px 10px;border-radius:10px}
+nav a[aria-current="page"]{background:var(--leaf-soft);color:var(--leaf)}
+main{padding-block:20px 48px}
+section[data-view]{display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:2rem;font-weight:800}
+h2{font-size:1.45rem;font-weight:700}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0}
+.muted{color:var(--muted)}
+.eyebrow{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.preview{background:var(--sun-soft);color:var(--sun-ink);border-radius:12px;padding:10px 14px;font-size:.88rem}
+.hero{display:flex;flex-direction:column;gap:12px;padding-top:6px}
+.hero .ages{display:inline-block;align-self:flex-start;background:var(--sun);color:#3b2800;font-weight:600;font-size:.85rem;padding:3px 12px;border-radius:999px}
+.btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;border:0;border-radius:14px;padding:13px 18px;font:600 1rem var(--body);cursor:pointer;text-decoration:none;background:var(--leaf);color:var(--leaf-ink)}
+.btn.ghost{background:transparent;color:var(--leaf);border:2px solid var(--leaf)}
+.btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row .btn{flex:1 1 180px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.offer{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:baseline}
+.price{font-family:var(--display);font-weight:700;font-size:1.3rem;color:var(--leaf);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tag{font-size:.75rem;font-weight:600;background:var(--sun-soft);color:var(--sun-ink);padding:2px 8px;border-radius:999px;justify-self:start}
+ul.plain{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.ticks li{padding-left:28px;position:relative}
+.ticks li::before{content:"";position:absolute;left:4px;top:.45em;width:12px;height:7px;border-left:3px solid var(--leaf);border-bottom:3px solid var(--leaf);transform:rotate(-45deg)}
+.sess{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:start;padding-block:12px;border-top:1px solid var(--line)}
+.sess:first-child{border-top:0}
+.date{background:var(--leaf-soft);color:var(--leaf);border-radius:12px;text-align:center;padding:6px 0;font-variant-numeric:tabular-nums}
+.date b{display:block;font-family:var(--display);font-size:1.4rem;line-height:1}
+.date span{font-size:.72rem;font-weight:600;text-transform:uppercase}
+.sess .meta{font-size:.88rem;color:var(--muted)}
+form{display:flex;flex-direction:column;gap:14px}
+label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.92rem}
+input,select{font:400 1rem var(--body);color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:12px}
+.choices{display:flex;flex-direction:column;gap:8px;border:0;padding:0;margin:0}
+.choices legend{font-weight:600;font-size:.92rem;margin-bottom:6px}
+.choice{flex-direction:row;align-items:center;gap:12px;font-weight:500;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer}
+.choice:has(input:checked){border-color:var(--leaf);background:var(--leaf-soft)}
+.choice input{accent-color:var(--leaf);width:20px;height:20px;margin:0}
+.choice .grow{flex:1;min-width:0}
+.choice .price{font-size:1.05rem}
+.err{background:var(--warn-soft);color:var(--warn-ink);border-radius:12px;padding:10px 14px;font-size:.9rem}
+.step{display:grid;grid-template-columns:32px 1fr;gap:12px}
+.step .n{width:32px;height:32px;border-radius:50%;background:var(--sun);color:#3b2800;font-family:var(--display);font-weight:800;display:grid;place-items:center}
+.step > div{min-width:0;display:flex;flex-direction:column;gap:8px}
+.code{font-family:var(--display);font-size:1.6rem;font-weight:800;letter-spacing:.04em;color:var(--leaf)}
+.msg{background:var(--bg);border:1px dashed var(--line);border-radius:12px;padding:10px 12px;font-size:.88rem;white-space:pre-wrap;overflow-wrap:anywhere}
+.qr{background:#fff;border-radius:14px;padding:14px;align-self:center;display:grid;place-items:center}
+.qr img,.qr canvas{display:block;width:220px!important;height:220px!important}
+dl.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0;font-size:.92rem}
+dl.kv dt{color:var(--muted)}
+dl.kv dd{margin:0;font-weight:600;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.acts{display:flex;flex-direction:column;gap:10px}
+details.act{background:var(--surface);border:1px solid var(--line);border-radius:16px}
+details.act summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center}
+details.act summary::-webkit-details-marker{display:none}
+details.act summary .num{width:40px;height:40px;border-radius:12px;background:var(--sun-soft);color:var(--sun-ink);font-family:var(--display);font-weight:800;font-size:1.2rem;display:grid;place-items:center}
+details.act summary .chev{width:10px;height:10px;border-right:2.5px solid var(--muted);border-bottom:2.5px solid var(--muted);transform:rotate(45deg);transition:transform .2s}
+details.act[open] summary .chev{transform:rotate(-135deg)}
+details.act .body{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}
+details.act ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+.tip{background:var(--leaf-soft);border-radius:12px;padding:10px 12px;font-size:.92rem}
+.copied{font-size:.85rem;color:var(--leaf);font-weight:600}
+footer{padding-block:24px;font-size:.82rem;color:var(--muted);text-align:center}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<header>
+  <div class="wrap">
+    <div class="bar">
+      <div class="brand">
+        <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><ellipse cx="9" cy="18" rx="5" ry="7" fill="var(--leaf)"/><ellipse cx="19" cy="10" rx="5" ry="7" fill="var(--sun)"/></svg>
+        <span id="brandName"></span>
+      </div>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="vi">VI</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+    </div>
+    <nav aria-label="Main">
+      <a href="#home" data-nav="home" data-t="navHome"></a>
+      <a href="#sessions" data-nav="sessions" data-t="navSessions"></a>
+      <a href="#book" data-nav="book" data-t="navBook"></a>
+      <a href="#activities" data-nav="activities" data-t="navActs"></a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="preview" id="previewNote" hidden></p>
+
+  <!-- HOME -->
+  <section data-view="home">
+    <div class="hero">
+      <span class="ages" data-t="ages"></span>
+      <h1 data-t="heroTitle"></h1>
+      <p class="muted" data-t="heroText"></p>
+      <div class="row">
+        <a class="btn" href="#book" data-t="ctaTaster"></a>
+        <a class="btn ghost" href="#sessions" data-t="ctaSessions"></a>
+      </div>
+    </div>
+    <div class="card">
+      <h3 data-t="youGet"></h3>
+      <ul class="plain ticks" id="getList"></ul>
+    </div>
+    <h2 data-t="pricesTitle"></h2>
+    <div id="offerCards" style="display:flex;flex-direction:column;gap:10px"></div>
+    <p class="muted" style="font-size:.88rem" id="hostedBy"></p>
+  </section>
+
+  <!-- SESSIONS -->
+  <section data-view="sessions" hidden>
+    <h2 data-t="navSessions"></h2>
+    <div class="card">
+      <span class="eyebrow" data-t="tasterLabel"></span>
+      <div id="tasterList"></div>
+    </div>
+    <div class="card">
+      <span class="eyebrow" data-t="seriesLabel"></span>
+      <div id="seriesList"></div>
+    </div>
+    <a class="btn" href="#book" data-t="ctaBook"></a>
+  </section>
+
+  <!-- BOOK -->
+  <section data-view="book" hidden>
+    <div id="bookForm">
+      <form id="form" novalidate>
+        <h2 data-t="bookTitle"></h2>
+        <fieldset class="choices" id="optionList">
+          <legend data-t="chooseOption"></legend>
+        </fieldset>
+        <label id="singleWrap" hidden><span data-t="whichSession"></span>
+          <select id="singleSession"></select>
+        </label>
+        <label><span data-t="parentName"></span><input id="parentName" autocomplete="name" required></label>
+        <label><span data-t="phone"></span><input id="phone" type="tel" inputmode="tel" autocomplete="tel" required></label>
+        <label><span data-t="childName"></span><input id="childName" required></label>
+        <label><span data-t="childAge"></span>
+          <select id="childAge" required>
+            <option value="" data-t="pick"></option>
+            <option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+          </select>
+        </label>
+        <p class="err" id="formErr" hidden></p>
+        <button class="btn" type="submit" data-t="continue"></button>
+      </form>
+    </div>
+    <div id="bookDone" hidden style="display:flex;flex-direction:column;gap:18px">
+      <div class="card">
+        <span class="eyebrow" data-t="yourCode"></span>
+        <span class="code" id="bookCode"></span>
+        <p id="bookSummary"></p>
+      </div>
+      <div class="step">
+        <span class="n">1</span>
+        <div>
+          <h3 data-t="step1"></h3>
+          <p class="muted" data-t="step1Text"></p>
+          <div class="msg" id="zaloMsg"></div>
+          <div class="row">
+            <button class="btn" type="button" id="copyMsg" data-t="copyMsg"></button>
+            <a class="btn ghost" id="zaloLink" target="_blank" rel="noopener" data-t="openZalo"></a>
+          </div>
+          <span class="copied" id="copiedNote" hidden data-t="copied"></span>
+          <p class="muted" style="font-size:.85rem"><span data-t="zaloNumber"></span> <b id="zaloNum"></b></p>
+        </div>
+      </div>
+      <div class="step" id="payStep">
+        <span class="n">2</span>
+        <div>
+          <h3 data-t="step2"></h3>
+          <p class="muted" data-t="step2Text"></p>
+          <div id="payReady">
+            <div class="qr" id="qr" role="img" aria-label="VietQR"></div>
+            <dl class="kv" style="margin-top:12px">
+              <dt data-t="bank"></dt><dd id="pBank"></dd>
+              <dt data-t="accName"></dt><dd id="pName"></dd>
+              <dt data-t="accNo"></dt><dd id="pNo"></dd>
+              <dt data-t="amount"></dt><dd id="pAmt"></dd>
+              <dt data-t="reference"></dt><dd id="pRef"></dd>
+            </dl>
+          </div>
+          <p class="preview" id="payPending" hidden data-t="payPending"></p>
+          <p class="tip" data-t="payAfter"></p>
+        </div>
+      </div>
+      <button class="btn ghost" type="button" id="again" data-t="again"></button>
+    </div>
+  </section>
+
+  <!-- ACTIVITIES -->
+  <section data-view="activities" hidden>
+    <h2 data-t="actsTitle"></h2>
+    <p class="muted" data-t="actsIntro"></p>
+    <div class="acts" id="actList"></div>
+  </section>
+</main>
+<footer class="wrap" id="foot"></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* =====================================================================
+   EDIT HERE: everything you are likely to change lives in CONFIG.
+   Prices are in Vietnamese dong. Dates are YYYY-MM-DD.
+   ===================================================================== */
+const CONFIG = {
+  brand: "Little Steps Parent Hub",
+  preview: true,                  // true shows the "sample dates" banner. Set to false when details are real.
+  zalo: "0900000000",             // your Zalo phone number (parents send their booking here)
+  partnerName: "Partner kindergarten (to be confirmed)",
+  venue: "Partner kindergarten, address to be confirmed",
+  prices: {
+    taster: 0,                    // free taster (Session 1)
+    single: 450000,               // one session
+    series: 2200000               // all 6 sessions
+  },
+  taster: [
+    { date: "2027-01-16", time: "09:00–10:15" },
+    { date: "2027-01-23", time: "09:00–10:15" }
+  ],
+  seriesStart: [                  // the 6 Saturday dates of the first paid series
+    "2027-03-06","2027-03-13","2027-03-20","2027-03-27","2027-04-03","2027-04-10"
+  ],
+  seriesTime: "09:00–10:15",
+  // Payment goes to the PARTNER's bank account. Leave accountNo empty until it is confirmed:
+  // the app then shows "payment details coming soon" instead of a QR code.
+  bank: {
+    bin: "",                      // bank code, e.g. 970436 = Vietcombank, 970415 = VietinBank, 970418 = BIDV, 970422 = MB
+    bankName: "",                 // e.g. "Vietcombank"
+    accountNo: "",
+    accountName: ""               // as on the account, e.g. "CONG TY ABC"
+  }
+};
+
+/* ---------- Session content (from the workshop series) ---------- */
+const SESSIONS = [
+  { en:{t:"What “school ready” really means", big:"Readiness is about habits and confidence, not reading and writing."},
+    vi:{t:"“Sẵn sàng vào lớp 1” thật sự là gì?", big:"Sẵn sàng là thói quen và sự tự tin, không phải biết đọc biết viết sớm."},
+    act:{en:{name:"The “I can” checklist", steps:["Stick a chart of five everyday skills on the fridge: put on shoes, wash hands, pack a bag, tidy up, sit and focus for 5 to 10 minutes.","Each time your child does one by themselves, they add a sticker.","Celebrate the effort at the end of the week, not just the number of stickers."], tip:"Resist doing it for them. A slow try on their own is worth more than a quick job done by you."},
+         vi:{name:"Bảng “Con tự làm được”", steps:["Dán lên tủ lạnh một bảng gồm 5 kỹ năng hằng ngày: tự đi giày, rửa tay, xếp cặp, dọn đồ chơi, ngồi tập trung 5–10 phút.","Mỗi lần con tự làm được một việc, con dán một hình dán.","Cuối tuần, khen ngợi sự cố gắng của con, không chỉ đếm số hình dán."], tip:"Cố gắng đừng làm thay con. Con tự làm chậm một chút vẫn quý hơn bố mẹ làm nhanh giúp con."}}},
+  { en:{t:"I can do it myself!", big:"Independence skills make the biggest difference in the first weeks."},
+    vi:{t:"Con tự làm được!", big:"Kỹ năng tự lập giúp con nhiều nhất trong những tuần đầu đi học."},
+    act:{en:{name:"Morning routine picture strip", steps:["Together, draw or photograph 4 to 5 morning steps: get dressed, breakfast, brush teeth, pack bag, shoes on.","Stick the pictures in order by the door.","Each morning, point to the strip instead of giving instructions. Help a little less each day."], tip:"Try “Have a go first, I’ll help if you need me.”"},
+         vi:{name:"Dải tranh thói quen buổi sáng", steps:["Cùng con vẽ hoặc chụp ảnh 4–5 bước buổi sáng: thay quần áo, ăn sáng, đánh răng, xếp cặp, đi giày.","Dán các tranh theo thứ tự cạnh cửa ra vào.","Mỗi sáng, chỉ vào dải tranh thay vì nhắc nhở. Mỗi ngày giúp con ít đi một chút."], tip:"Hãy thử nói: “Con thử làm trước nhé, cần thì bố/mẹ giúp.”"}}},
+  { en:{t:"Sounds before letters", big:"Talk, rhymes and phonics games build early reading the right way."},
+    vi:{t:"Âm trước, chữ sau", big:"Trò chuyện, vần điệu và trò chơi ngữ âm giúp con học đọc đúng cách."},
+    act:{en:{name:"Sound treasure hunt", steps:["Each day, pick one sound: s, a, t, p, i or n.","Find three things around the house that start with that sound. Take a photo or draw them.","Say the pure sound (“sss”, not “suh”).","Finish the evening with 10 minutes of reading together."], tip:"No worksheets needed. Playing with sounds out loud is the real work at this age."},
+         vi:{name:"Truy tìm âm thanh", steps:["Mỗi ngày chọn một âm: s, a, t, p, i hoặc n.","Tìm ba đồ vật trong nhà bắt đầu bằng âm đó. Chụp ảnh hoặc vẽ lại.","Phát âm thật gọn (“sss”, không phải “sờ”).","Kết thúc buổi tối bằng 10 phút cùng con đọc sách."], tip:"Không cần phiếu bài tập. Ở tuổi này, chơi với âm thanh thành tiếng mới là điều quan trọng."}}},
+  { en:{t:"Maths is everywhere", big:"Number sense grows through play, cooking, shopping and counting."},
+    vi:{t:"Toán học ở khắp nơi", big:"Cảm nhận về số phát triển qua chơi, nấu ăn, đi chợ và đếm."},
+    act:{en:{name:"Kitchen and shopping maths", steps:["Once a day, give your child a real counting job: set the table, count fruit into a bag, or share snacks fairly.","Ask one “How many more?” question each time.","Follow up with “How do you know?”"], tip:"Mistakes are fine. Ask them to show you how they counted."},
+         vi:{name:"Toán trong bếp và khi đi chợ", steps:["Mỗi ngày giao cho con một việc đếm thật: bày bát đũa, đếm trái cây bỏ vào túi, hoặc chia bánh cho đều.","Mỗi lần hỏi con một câu “Cần thêm mấy cái nữa?”","Hỏi tiếp: “Sao con biết?”"], tip:"Con đếm sai cũng không sao. Hãy nhờ con chỉ lại cách con đã đếm."}}},
+  { en:{t:"Big feelings, good friends", big:"Emotional and social skills help children settle and learn."},
+    vi:{t:"Cảm xúc lớn, bạn bè tốt", big:"Kỹ năng cảm xúc và xã hội giúp con hòa nhập và học tốt."},
+    act:{en:{name:"The feelings check-in", steps:["At dinner or bedtime, each family member points to a feelings face.","Everyone says one sentence: “Today I felt… because…”. Parents go first.","Play one family board game a week to practise waiting and losing kindly."], tip:"Name feelings without fixing them straight away: “You felt cross because…”"},
+         vi:{name:"Chia sẻ cảm xúc mỗi ngày", steps:["Vào bữa tối hoặc trước khi ngủ, mỗi người chỉ vào một khuôn mặt cảm xúc.","Mỗi người nói một câu: “Hôm nay con/mẹ thấy… vì…”. Bố mẹ nói trước.","Mỗi tuần chơi một trò board game cả nhà để tập chờ lượt và biết thua vui vẻ."], tip:"Gọi tên cảm xúc trước khi vội giải quyết: “Con thấy bực vì…”"}}},
+  { en:{t:"Ready, steady, school!", big:"A simple home routine and a plan for the first month."},
+    vi:{t:"Sẵn sàng đến trường!", big:"Một nếp sinh hoạt đơn giản ở nhà và kế hoạch cho tháng đầu tiên."},
+    act:{en:{name:"My first-month plan", steps:["Use the one-page planner: reading, one sound or maths game, one independence job and a feelings check-in each day (15 to 20 minutes).","Ask the “talk about school” question for that day of the week.","Stick the planner where the whole family can see it."], tip:"Expect some tiredness and tears in week one. A calm, predictable goodbye helps."},
+         vi:{name:"Kế hoạch tháng đầu tiên", steps:["Dùng tờ kế hoạch một trang: mỗi ngày đọc sách, một trò chơi âm hoặc toán, một việc tự lập và chia sẻ cảm xúc (15–20 phút).","Hỏi con câu “nói về trường lớp” của ngày hôm đó.","Dán kế hoạch ở nơi cả nhà đều thấy."], tip:"Tuần đầu con có thể mệt và khóc. Một lời tạm biệt bình tĩnh, quen thuộc sẽ giúp con."}}}
+];
+
+/* ---------- Interface text ---------- */
+const T = {
+  navHome:{en:"Home",vi:"Trang chủ"}, navSessions:{en:"Sessions",vi:"Lịch học"}, navBook:{en:"Book",vi:"Đăng ký"}, navActs:{en:"At home",vi:"Ở nhà"},
+  ages:{en:"For parents of 4 to 6-year-olds",vi:"Dành cho phụ huynh có con 4–6 tuổi"},
+  heroTitle:{en:"Ready for Grade 1, together",vi:"Cùng con sẵn sàng vào lớp 1"},
+  heroText:{en:"Six short, friendly workshops led by an experienced Cambridge primary teacher. Simple, play-based ideas you can use at home every day. No worksheets, no tutors.",vi:"Sáu buổi workshop ngắn, thân thiện do một giáo viên tiểu học Cambridge giàu kinh nghiệm hướng dẫn. Những ý tưởng đơn giản, qua trò chơi, bố mẹ dùng được ở nhà mỗi ngày. Không cần phiếu bài tập, không cần gia sư."},
+  ctaTaster:{en:"Book a free taster",vi:"Đăng ký buổi học thử miễn phí"}, ctaSessions:{en:"See dates",vi:"Xem lịch học"}, ctaBook:{en:"Book a place",vi:"Đăng ký chỗ"},
+  youGet:{en:"What you get",vi:"Bố mẹ nhận được"},
+  get:{en:["A take-home activity card after every session, in English and Vietnamese","A private Zalo group for questions and tips during the series","A first-month plan for Grade 1","A certificate for your family at the end"],
+       vi:["Thẻ hoạt động tại nhà sau mỗi buổi, bằng tiếng Anh và tiếng Việt","Nhóm Zalo riêng để hỏi đáp và chia sẻ trong suốt khóa","Kế hoạch tháng đầu tiên vào lớp 1","Giấy chứng nhận cho gia đình khi hoàn thành"]},
+  pricesTitle:{en:"Prices",vi:"Học phí"},
+  oTaster:{en:"Free taster",vi:"Buổi học thử"}, oTasterD:{en:"Session 1: what “school ready” really means",vi:"Buổi 1: “Sẵn sàng vào lớp 1” thật sự là gì?"},
+  oSeries:{en:"Full series (6 sessions)",vi:"Trọn khóa (6 buổi)"}, oSeriesD:{en:"Best value, includes the Zalo group and certificate",vi:"Tiết kiệm nhất, có nhóm Zalo và giấy chứng nhận"},
+  oSingle:{en:"Single session",vi:"Học lẻ một buổi"}, oSingleD:{en:"Pick any one topic",vi:"Chọn một chủ đề bất kỳ"},
+  free:{en:"Free",vi:"Miễn phí"}, save:{en:"Save",vi:"Tiết kiệm"},
+  hostedBy:{en:"Sessions are held at",vi:"Các buổi học diễn ra tại"},
+  tasterLabel:{en:"Free taster (Session 1)",vi:"Buổi học thử miễn phí (Buổi 1)"}, seriesLabel:{en:"Full series, every Saturday",vi:"Trọn khóa, sáng thứ Bảy hằng tuần"},
+  bookTitle:{en:"Book your place",vi:"Đăng ký chỗ"}, chooseOption:{en:"What would you like to book?",vi:"Bố mẹ muốn đăng ký gì?"},
+  whichSession:{en:"Which session?",vi:"Buổi nào?"},
+  parentName:{en:"Your name",vi:"Họ tên phụ huynh"}, phone:{en:"Phone number (Zalo)",vi:"Số điện thoại (Zalo)"},
+  childName:{en:"Child’s name",vi:"Tên của con"}, childAge:{en:"Child’s age",vi:"Tuổi của con"}, pick:{en:"Choose…",vi:"Chọn…"},
+  continue:{en:"Continue",vi:"Tiếp tục"},
+  errFill:{en:"Please fill in every field so we can confirm your place.",vi:"Bố mẹ vui lòng điền đầy đủ thông tin để chúng tôi xác nhận chỗ."},
+  errPhone:{en:"Please check the phone number. It should have 9 to 11 digits.",vi:"Vui lòng kiểm tra lại số điện thoại (9–11 chữ số)."},
+  yourCode:{en:"Your booking code",vi:"Mã đăng ký của bạn"},
+  step1:{en:"Send your booking on Zalo",vi:"Gửi thông tin đăng ký qua Zalo"},
+  step1Text:{en:"Copy this message and send it to us on Zalo. We’ll reply to confirm your place.",vi:"Sao chép tin nhắn dưới đây và gửi cho chúng tôi qua Zalo. Chúng tôi sẽ trả lời để xác nhận chỗ."},
+  copyMsg:{en:"Copy message",vi:"Sao chép tin nhắn"}, openZalo:{en:"Open Zalo",vi:"Mở Zalo"}, copied:{en:"Copied. Now paste it in Zalo.",vi:"Đã sao chép. Bố mẹ dán vào Zalo nhé."},
+  zaloNumber:{en:"Our Zalo number:",vi:"Số Zalo:"},
+  step2:{en:"Pay by bank transfer (VietQR)",vi:"Thanh toán chuyển khoản (VietQR)"},
+  step2Text:{en:"Scan the QR code in your banking app. The amount and booking code are filled in for you.",vi:"Quét mã QR bằng ứng dụng ngân hàng. Số tiền và mã đăng ký đã được điền sẵn."},
+  bank:{en:"Bank",vi:"Ngân hàng"}, accName:{en:"Account name",vi:"Tên tài khoản"}, accNo:{en:"Account number",vi:"Số tài khoản"}, amount:{en:"Amount",vi:"Số tiền"}, reference:{en:"Reference",vi:"Nội dung"},
+  payPending:{en:"Payment details are coming soon. We’ll send them to you on Zalo when we confirm your place.",vi:"Thông tin thanh toán sẽ được cập nhật sớm. Chúng tôi sẽ gửi qua Zalo khi xác nhận chỗ cho bố mẹ."},
+  payAfter:{en:"Your place is confirmed once we’ve received your payment. We’ll message you on Zalo.",vi:"Chỗ của bố mẹ được xác nhận khi chúng tôi nhận được thanh toán. Chúng tôi sẽ nhắn qua Zalo."},
+  again:{en:"Make another booking",vi:"Đăng ký thêm"},
+  actsTitle:{en:"Take-home activities",vi:"Hoạt động tại nhà"},
+  actsIntro:{en:"One simple activity for each session. About 10 minutes a day is plenty.",vi:"Mỗi buổi có một hoạt động đơn giản. Mỗi ngày khoảng 10 phút là đủ."},
+  why:{en:"The big idea",vi:"Ý chính"}, how:{en:"What to do",vi:"Cách làm"},
+  session:{en:"Session",vi:"Buổi"},
+  previewNote:{en:"Preview: dates, venue and payment details are samples and will be updated.",vi:"Bản xem trước: ngày, địa điểm và thông tin thanh toán là mẫu, sẽ được cập nhật."},
+  msgHello:{en:"Hello! I'd like to book:",vi:"Xin chào! Tôi muốn đăng ký:"},
+  footer:{en:"Questions? Message us on Zalo:",vi:"Có thắc mắc? Nhắn cho chúng tôi qua Zalo:"}
+};
+
+/* ---------- Helpers ---------- */
+let lang = "vi";
+try { lang = localStorage.getItem("lang") || "vi"; } catch(e) {}
+const $ = id => document.getElementById(id);
+const t = k => (T[k] ? T[k][lang] : k);
+const vnd = n => n === 0 ? t("free") : new Intl.NumberFormat("vi-VN").format(n) + " ₫";
+const parseDate = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y, m-1, d); };
+const locale = () => lang === "vi" ? "vi-VN" : "en-GB";
+const fmtLong = s => parseDate(s).toLocaleDateString(locale(), {weekday:"long", day:"numeric", month:"long", year:"numeric"});
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function dateBadge(s){
+  const d = parseDate(s);
+  return `<div class="date"><b>${d.getDate()}</b><span>${d.toLocaleDateString(locale(),{month:"short"})}</span></div>`;
+}
+
+/* ---------- Render ---------- */
+function render(){
+  document.documentElement.lang = lang;
+  $("brandName").textContent = CONFIG.brand;
+  document.querySelectorAll("[data-t]").forEach(el => el.textContent = t(el.dataset.t));
+  document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+  $("previewNote").hidden = !CONFIG.preview;
+  $("previewNote").textContent = t("previewNote");
+
+  $("getList").innerHTML = T.get[lang].map(x => `<li>${esc(x)}</li>`).join("");
+
+  const p = CONFIG.prices, saving = p.single * 6 - p.series;
+  $("offerCards").innerHTML = [
+    ["oTaster","oTasterD",p.taster,""],
+    ["oSeries","oSeriesD",p.series, saving > 0 ? `${t("save")} ${vnd(saving)}` : ""],
+    ["oSingle","oSingleD",p.single,""]
+  ].map(([n,d,price,tag]) => `<div class="card offer"><h3>${t(n)}</h3><span class="price">${vnd(price)}</span><p class="muted" style="font-size:.9rem">${t(d)}</p>${tag?`<span class="tag">${esc(tag)}</span>`:""}</div>`).join("");
+  $("hostedBy").textContent = `${t("hostedBy")} ${CONFIG.venue}.`;
+
+  $("tasterList").innerHTML = CONFIG.taster.map(s => `<div class="sess">${dateBadge(s.date)}<div><h3>${esc(SESSIONS[0][lang].t)}</h3><p class="meta">${esc(fmtLong(s.date))} · ${esc(s.time)}<br>${esc(CONFIG.venue)}</p></div></div>`).join("");
+  $("seriesList").innerHTML = CONFIG.seriesStart.map((d,i) => `<div class="sess">${dateBadge(d)}<div><h3>${t("session")} ${i+1}: ${esc(SESSIONS[i][lang].t)}</h3><p class="meta">${esc(SESSIONS[i][lang].big)}</p><p class="meta">${esc(fmtLong(d))} · ${esc(CONFIG.seriesTime)}</p></div></div>`).join("");
+
+  // booking options
+  const checked = (document.querySelector('input[name="opt"]:checked')||{}).value || "taster";
+  const opts = CONFIG.taster.map((s,i) => ({v:"taster-"+i, label:`${t("oTaster")} · ${fmtLong(s.date)}`, price:p.taster}))
+    .concat([{v:"series",label:t("oSeries"),price:p.series},{v:"single",label:t("oSingle"),price:p.single}]);
+  const keep = opts.some(o => o.v === checked) ? checked : opts[0].v;
+  $("optionList").innerHTML = `<legend>${t("chooseOption")}</legend>` + opts.map(o =>
+    `<label class="choice"><input type="radio" name="opt" value="${o.v}" ${o.v===keep?"checked":""}><span class="grow">${esc(o.label)}</span><span class="price">${vnd(o.price)}</span></label>`).join("");
+  const selSingle = $("singleSession").value || "1";
+  $("singleSession").innerHTML = CONFIG.seriesStart.map((d,i) => `<option value="${i}">${t("session")} ${i+1}: ${esc(SESSIONS[i][lang].t)} (${esc(parseDate(d).toLocaleDateString(locale(),{day:"numeric",month:"short"}))})</option>`).join("");
+  $("singleSession").value = selSingle;
+  $("singleWrap").hidden = keep !== "single";
+
+  $("actList").innerHTML = SESSIONS.map((s,i) => {
+    const a = s.act[lang];
+    return `<details class="act"><summary><span class="num">${i+1}</span><span><b>${esc(a.name)}</b><br><span class="muted" style="font-size:.85rem">${esc(s[lang].t)}</span></span><span class="chev" aria-hidden="true"></span></summary>
+      <div class="body"><p><b>${t("why")}:</b> ${esc(s[lang].big)}</p><b>${t("how")}</b><ol>${a.steps.map(x=>`<li>${esc(x)}</li>`).join("")}</ol><p class="tip">${esc(a.tip)}</p></div></details>`;
+  }).join("");
+
+  $("foot").textContent = `${CONFIG.brand} · ${t("footer")} ${CONFIG.zalo}`;
+  if (lastBooking) showBooking(lastBooking);
+}
+
+/* ---------- Routing ---------- */
+const VIEWS = ["home","sessions","book","activities"];
+function route(){
+  const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "home";
+  document.querySelectorAll("[data-view]").forEach(s => s.hidden = s.dataset.view !== v);
+  document.querySelectorAll("[data-nav]").forEach(a => a.dataset.nav === v ? a.setAttribute("aria-current","page") : a.removeAttribute("aria-current"));
+  window.scrollTo(0,0);
+}
+
+/* ---------- VietQR (EMVCo) payload ---------- */
+function tlv(id, val){ return id + String(val.length).padStart(2,"0") + val; }
+function crc16(s){
+  let c = 0xFFFF;
+  for (let i=0;i<s.length;i++){ c ^= s.charCodeAt(i) << 8; for (let j=0;j<8;j++) c = (c & 0x8000) ? ((c << 1) ^ 0x1021) & 0xFFFF : (c << 1) & 0xFFFF; }
+  return c.toString(16).toUpperCase().padStart(4,"0");
+}
+function vietqr({bin, accountNo, amount, note}){
+  const acct = tlv("00","A000000727") + tlv("01", tlv("00",bin) + tlv("01",accountNo)) + tlv("02","QRIBFTTA");
+  let s = tlv("00","01") + tlv("01", amount ? "12" : "11") + tlv("38", acct) + tlv("53","704");
+  if (amount) s += tlv("54", String(amount));
+  s += tlv("58","VN") + tlv("62", tlv("08", note));
+  s += "6304";
+  return s + crc16(s);
+}
+const ascii = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d").replace(/Đ/g,"D").replace(/[^A-Za-z0-9 ]/g,"");
+
+/* ---------- Booking ---------- */
+let lastBooking = null;
+function bookingCode(){ return "LS" + Math.floor(1000 + Math.random()*9000); }
+
+$("optionList").addEventListener("change", () => {
+  $("singleWrap").hidden = (document.querySelector('input[name="opt"]:checked')||{}).value !== "single";
+});
+
+$("form").addEventListener("submit", e => {
+  e.preventDefault();
+  const opt = (document.querySelector('input[name="opt"]:checked')||{}).value;
+  const f = { opt, single: Number($("singleSession").value), parent: $("parentName").value.trim(), phone: $("phone").value.replace(/[^\d+]/g,""), child: $("childName").value.trim(), age: $("childAge").value };
+  const err = $("formErr");
+  if (!f.opt || !f.parent || !f.phone || !f.child || !f.age){ err.textContent = t("errFill"); err.hidden = false; return; }
+  const digits = f.phone.replace(/\D/g,"");
+  if (digits.length < 9 || digits.length > 11){ err.textContent = t("errPhone"); err.hidden = false; return; }
+  err.hidden = true;
+  f.code = bookingCode();
+  lastBooking = f;
+  showBooking(f);
+  $("bookForm").hidden = true; $("bookDone").hidden = false;
+  window.scrollTo(0,0);
+});
+
+function describe(f){
+  if (f.opt.startsWith("taster-")){ const s = CONFIG.taster[Number(f.opt.split("-")[1])]; return {label:`${t("oTaster")}: ${fmtLong(s.date)}, ${s.time}`, price:CONFIG.prices.taster, short:"Taster"}; }
+  if (f.opt === "series") return {label:`${t("oSeries")}: ${fmtLong(CONFIG.seriesStart[0])}`, price:CONFIG.prices.series, short:"Series"};
+  return {label:`${t("oSingle")}: ${t("session")} ${f.single+1}, ${fmtLong(CONFIG.seriesStart[f.single])}`, price:CONFIG.prices.single, short:"Session"+(f.single+1)};
+}
+
+function showBooking(f){
+  const d = describe(f);
+  $("bookCode").textContent = f.code;
+  $("bookSummary").textContent = `${d.label} · ${vnd(d.price)}`;
+  const msg = `${t("msgHello")}\n${d.label}\n${t("parentName")}: ${f.parent}\n${t("phone")}: ${f.phone}\n${t("childName")}: ${f.child} (${f.age})\n${t("yourCode")}: ${f.code}`;
+  $("zaloMsg").textContent = msg;
+  $("zaloLink").href = "https://zalo.me/" + CONFIG.zalo.replace(/\D/g,"");
+  $("zaloNum").textContent = CONFIG.zalo;
+  $("copiedNote").hidden = true;
+
+  const paid = d.price > 0;
+  $("payStep").hidden = !paid;
+  if (!paid) return;
+  const b = CONFIG.bank, ready = b.bin && b.accountNo;
+  $("payReady").hidden = !ready; $("payPending").hidden = !!ready;
+  if (!ready) return;
+  const note = ascii(`${f.code} ${d.short}`).slice(0,25);
+  $("pBank").textContent = b.bankName; $("pName").textContent = b.accountName; $("pNo").textContent = b.accountNo;
+  $("pAmt").textContent = vnd(d.price); $("pRef").textContent = note;
+  $("qr").innerHTML = "";
+  if (window.QRCode) new QRCode($("qr"), {text: vietqr({bin:b.bin, accountNo:b.accountNo, amount:d.price, note}), width:220, height:220, correctLevel: QRCode.CorrectLevel.M});
+}
+
+$("copyMsg").addEventListener("click", () => {
+  const text = $("zaloMsg").textContent;
+  const done = () => { $("copiedNote").hidden = false; };
+  const fallback = () => { const r = document.createRange(); r.selectNodeContents($("zaloMsg")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); };
+  try { navigator.clipboard.writeText(text).then(done, fallback); } catch(e){ fallback(); }
+});
+
+$("again").addEventListener("click", () => {
+  lastBooking = null; $("form").reset(); $("bookForm").hidden = false; $("bookDone").hidden = true; render(); window.scrollTo(0,0);
+});
+
+document.querySelectorAll("[data-lang]").forEach(b => b.addEventListener("click", () => {
+  lang = b.dataset.lang; try { localStorage.setItem("lang", lang); } catch(e) {}
+  render();
+}));
+
+window.addEventListener("hashchange", route);
+render(); route();
+</script>
+
+</body>
+</html>
